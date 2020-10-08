@@ -15,10 +15,17 @@ try:
 except:
 	pass
 
+try:
+    USER = os.environ['ADB_JENKINS_USER']
+    TOKEN = os.environ['ADB_JENKINS_TOKEN']
+except KeyError as key:
+    print(f"Environment variable missing: {key}")
+    sys.exit(1)
+except:
+    pass
+
 JENKINS_URL="https://jenkins.arangodb.biz"
 JOB_NAME="arangodb-matrix-pr"
-USER="lars"
-TOKEN="1174a496c28d761330f54428a9530d9bb2"
 
 enterprise_path = os.path.join(os.getcwd(), "enterprise")
 

@@ -9,8 +9,15 @@ import sys
 def eprint(*args, **kwargs):
     print(*args, file=sys.stderr, **kwargs)
 
-USER = "maierlars"
-GITHUB_API_TOKEN = "48813ddaa44765756f285840cd8b31cadcc8ec56"
+try:
+    USER = os.environ['ADB_GITHUB_USER']
+    GITHUB_API_TOKEN = os.environ['ADB_GITHUB_TOKEN']
+except KeyError as key:
+    print(f"Environment variable missing: {key}")
+    sys.exit(1)
+except:
+    pass
+
 GITHUB_BASE_URL = "https://api.github.com/"
 REPO_USER = "arangodb"
 
