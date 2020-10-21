@@ -31,7 +31,7 @@ ENTERPRISE_BRANCH = pygit2.Repository(enterprise_path).head.shorthand if os.path
 
 def create_pr_comment(comment):
 
-	arangodb_prs_reponse = requests.get(os.path.join(GITHUB_BASE_URL, "repos", ARANGODB_REPO, "pulls"), auth=(USER, GITHUB_API_TOKEN), 
+	arangodb_prs_reponse = requests.get(os.path.join(GITHUB_BASE_URL, "repos", ARANGODB_REPO, "pulls"), auth=(USER, GITHUB_API_TOKEN),
 		params={"head": "{}:{}".format(REPO_USER, ARANGODB_BRANCH)})
 
 	if arangodb_prs_reponse.status_code != 200:
@@ -47,7 +47,7 @@ def create_pr_comment(comment):
 	if len(arangodb_prs) > 1:
 		eprint("found multiple PRs:")
 		for pr in arangodb_prs:
-			eprint("#{pr[number]} {pr[title]}".format(pr=pr))
+			eprint("#{pr[number]} {pr[title]} [{pr[html_url]}]".format(pr=pr))
 		sys.exit(1)
 
 	this_pr = arangodb_prs[0]
@@ -58,6 +58,9 @@ def create_pr_comment(comment):
 	if post_response.status_code != 201:
 			eprint("Failed to create comment:", post_response.reason)
 			sys.exit(1)
+
+	post = post_response.json()
+	print(post["html_url"])
 
 if __name__ == '__main__':
 	if len(sys.argv) != 2:
