@@ -11,3 +11,11 @@ ADB_GITHUB_USER
 ADB_GITHUB_TOKEN
 ADB_SLACK_USER # not yet used
 ```
+
+To get bash completion, call
+
+```
+source path-to-here/bash-completion.bash
+```
+
+in your `~/.bashrc`.
