@@ -41,7 +41,7 @@ def create_jenkins_job():
 	if not ENTERPRISE_BRANCH is None:
 		params["ENTERPRISE_BRANCH"] = ENTERPRISE_BRANCH
 
-	create_response = requests.post(os.path.join(JENKINS_URL, "job/{}/buildWithParameters".format(JOB_NAME)), 
+	create_response = requests.post(os.path.join(JENKINS_URL, "job/{}/buildWithParameters".format(JOB_NAME)),
 		auth=(USER, TOKEN), params=params, verify=False)
 
 	if create_response.status_code != 201:
@@ -70,6 +70,16 @@ def create_jenkins_job():
 		counter += 1
 		if counter % 4 == 0:
 			eprint("Waiting for job to start...")
+
+def abort_jenkins_job(id):
+
+    job_url = os.path.join(JENKINS_URL, "job/{name}/{id}/api/json/stop".format(name=JOB_NAME, id=id))
+    job_response = requests.post(job_url, auth=(USER, TOKEN), verify=False)
+
+    if job_response.status_code != 200:
+        eprint("Failed to abort job:", job_response.reason);
+        sys.exit(1)
+
 
 if __name__ == '__main__':
 	url = create_jenkins_job()

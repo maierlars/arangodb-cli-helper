@@ -29,13 +29,32 @@ enterprise_path = os.path.join(os.getcwd(), "enterprise")
 ARANGODB_BRANCH = pygit2.Repository(os.getcwd()).head.shorthand
 ENTERPRISE_BRANCH = pygit2.Repository(enterprise_path).head.shorthand if os.path.isdir(enterprise_path) else None
 
+def list_all_prs():
+	arangodb_prs_reponse = requests.get(os.path.join(GITHUB_BASE_URL, "repos", ARANGODB_REPO, "pulls"), auth=(USER, GITHUB_API_TOKEN),
+		params={"head": "{}:{}".format(REPO_USER, ARANGODB_BRANCH)})
+
+	if arangodb_prs_reponse.status_code != 200:
+			eprint("Failed to get PRs:", arangodb_prs_reponse.reason)
+			sys.exit(1)
+
+	arangodb_prs = arangodb_prs_reponse.json()
+
+	if len(arangodb_prs) == 0:
+		eprint("PR not found")
+		sys.exit(1)
+
+
+	for pr in arangodb_prs:
+		eprint("#{pr[number]} {pr[title]} [{pr[html_url]}]".format(pr=pr))
+
+
 def create_pr_comment(comment):
 
 	arangodb_prs_reponse = requests.get(os.path.join(GITHUB_BASE_URL, "repos", ARANGODB_REPO, "pulls"), auth=(USER, GITHUB_API_TOKEN),
 		params={"head": "{}:{}".format(REPO_USER, ARANGODB_BRANCH)})
 
 	if arangodb_prs_reponse.status_code != 200:
-			eprint("Failed to get queue entry:", arangodb_prs_reponse.reason)
+			eprint("Failed to get PRs:", arangodb_prs_reponse.reason)
 			sys.exit(1)
 
 	arangodb_prs = arangodb_prs_reponse.json()
@@ -63,7 +82,13 @@ def create_pr_comment(comment):
 	print(post["html_url"])
 
 if __name__ == '__main__':
-	if len(sys.argv) != 2:
-		eprint("expected one parameter with comment content")
+	if len(sys.argv) < 2:
+		eprint("expected one parameter command")
 		sys.exit(1)
-	create_pr_comment(sys.argv[1])
+	if sys.argv[1] == "comment":
+		if len(sys.argv) != 3:
+			eprint("expected one parameter with comment content")
+			sys.exit(1)
+		create_pr_comment(sys.argv[2])
+	elif sys.argv[1] == "prs":
+		list_all_prs()

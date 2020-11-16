@@ -21,6 +21,12 @@ case $1 in
         jenkins)
                 arangodb-jenkins-run-pr-post.py
                 ;;
+        jenkins-status)
+                arangodb-jenkins-pr-status.py
+                ;;
+        prs)
+                arangodb-github-post-comment-pr.py prs
+                ;;
         -h|--help)
                 usage
                 exit 0
