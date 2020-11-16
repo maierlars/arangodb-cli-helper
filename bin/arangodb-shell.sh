@@ -7,6 +7,8 @@ Usage: $0 [-h|--help] <command> [<args>]
   -h|--help           show this usage information
 Commands:
   jenkins             start a jenkins pr matrix on the current branch
+  jenkins-status      query the status of the last jenkins pr matrix posted on the PR
+  prs                 list all PRs associated with the current branch
 USAGE
 }
 
