@@ -73,7 +73,7 @@ def create_jenkins_job():
 
 def abort_jenkins_job(id):
 
-    job_url = os.path.join(JENKINS_URL, "job/{name}/{id}/api/json/stop".format(name=JOB_NAME, id=id))
+    job_url = os.path.join(JENKINS_URL, "job/{name}/{id}/stop".format(name=JOB_NAME, id=id))
     job_response = requests.post(job_url, auth=(USER, TOKEN), verify=False)
 
     if job_response.status_code != 200:
