@@ -20,27 +20,37 @@ then
 fi
 
 
-case $1 in
-        jenkins)
+case "$1" in
+    jenkins)
+        case "$2" in
+            ''|post) # default
                 arangodb-jenkins-run-pr-post.py
                 ;;
-        jenkins-status)
+            status)
                 arangodb-jenkins-pr-status.py
                 ;;
-        jenkins-watch)
+            watch)
                 arangodb-jenkins-pr-status-watch.py
                 ;;
-        prs)
-                arangodb-github-post-comment-pr.py prs
-                ;;
-        -h|--help)
+            *)
+                echo "Unknown command or option to $1: $2"
+                echo ""
                 usage
                 exit 0
                 ;;
-        *)
-                echo "Unknown command or option: $1"
-                echo ""
-                usage
-                exit 1
-                ;;
+        esac
+        ;;
+    prs)
+        arangodb-github-post-comment-pr.py prs
+        ;;
+    -h|--help)
+        usage
+        exit 0
+        ;;
+    *)
+        echo "Unknown command or option: $1"
+        echo ""
+        usage
+        exit 1
+        ;;
 esac
