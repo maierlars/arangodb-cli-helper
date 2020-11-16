@@ -8,6 +8,7 @@ Usage: $0 [-h|--help] <command> [<args>]
 Commands:
   jenkins             start a jenkins pr matrix on the current branch
   jenkins-status      query the status of the last jenkins pr matrix posted on the PR
+  jenkins-watch       watch the status of the last jenkins pr matrix posted on the PR
   prs                 list all PRs associated with the current branch
 USAGE
 }
@@ -25,6 +26,9 @@ case $1 in
                 ;;
         jenkins-status)
                 arangodb-jenkins-pr-status.py
+                ;;
+        jenkins-watch)
+                arangodb-jenkins-pr-status-watch.py
                 ;;
         prs)
                 arangodb-github-post-comment-pr.py prs
