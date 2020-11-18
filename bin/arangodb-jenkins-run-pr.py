@@ -79,6 +79,7 @@ def abort_jenkins_job(id):
     if job_response.status_code != 200:
         eprint("Failed to abort job:", job_response.reason);
         sys.exit(1)
+    print("{} aborted".format(id))
 
 
 if __name__ == '__main__':

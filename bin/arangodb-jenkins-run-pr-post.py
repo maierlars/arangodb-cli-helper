@@ -32,14 +32,14 @@ last_run = last_jenkins_run()
 if last_run is not None:
     if last_run["result"] is None:
         q = input("Last job is still running, do you want to continue (y) and/or abort (a) it? [A/y/n]: ");
-        if q in ["a", "A"]:
+        if q in ["a", "A", ""]:
             jenkins_runner.abort_jenkins_job(last_run["id"])
         elif q in ["y", "Y"]:
             pass
         else:
             quit()
-else:
-    print("Job has ended, Status: " + last_run["result"])
+    else:
+        print("Job has ended, Status: " + last_run["result"])
 
 URL = jenkins_runner.create_jenkins_job()
 

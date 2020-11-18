@@ -92,3 +92,6 @@ if __name__ == '__main__':
 		create_pr_comment(sys.argv[2])
 	elif sys.argv[1] == "prs":
 		list_all_prs()
+	else:
+		eprint("unknown command")
+		sys.exit(1)
