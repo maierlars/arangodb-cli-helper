@@ -33,8 +33,8 @@ ARANGODB_BRANCH = pygit2.Repository(os.getcwd()).head.shorthand
 ENTERPRISE_BRANCH = pygit2.Repository(enterprise_path).head.shorthand if os.path.isdir(enterprise_path) else None
 
 def create_jenkins_job():
-	confirm = input("Run jenkins on {b}, enterprise {eb}:\nContinue? [y/N] ".format(b=ARANGODB_BRANCH, eb=ENTERPRISE_BRANCH))
-	if confirm.strip() not in ["Y", "y"]:
+	confirm = input("Run jenkins on {b}, enterprise {eb}:\nContinue? [Y/n] ".format(b=ARANGODB_BRANCH, eb=ENTERPRISE_BRANCH))
+	if confirm.strip() not in ["Y", "y", ""]:
 		sys.exit(1)
 
 	params = {"ARANGODB_BRANCH": ARANGODB_BRANCH}
