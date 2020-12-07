@@ -57,7 +57,7 @@ def jenkins_job_status(id):
 
     if job_response.status_code != 200:
         eprint("Failed to get job:", job_response.reason);
-        sys.exit(1)
+        return None
 
     job = job_response.json()
     return job
@@ -76,5 +76,6 @@ if __name__ == '__main__':
         eprint("expected one parameter with job id")
         sys.exit(1)
     job = jenkins_job_status(sys.argv[1])
-    print_job_status(job)
+    if not job is None:
+        print_job_status(job)
     sys.exit(0)

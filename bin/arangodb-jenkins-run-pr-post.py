@@ -15,9 +15,10 @@ github_comment_lister = importlib.import_module("arangodb-github-list-comments")
 def eprint(*args, **kwargs):
     print(*args, file=sys.stderr, **kwargs)
 
+
+
 def last_jenkins_run():
     comments = github_comment_lister.list_all_jenkins_pr_comments()
-
     if len(comments) == 0:
         return None
 
@@ -50,6 +51,7 @@ if q in ["n", "N"]:
 	quit()
 
 github_comment_tool.create_pr_comment(URL)
+
 
 
 
