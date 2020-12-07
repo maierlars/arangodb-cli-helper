@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# vim: set noet sw=8:
 
 import os
 import requests
@@ -18,6 +19,7 @@ except:
 try:
     USER = os.environ['ADB_JENKINS_USER']
     TOKEN = os.environ['ADB_JENKINS_TOKEN']
+    SLACK_USER = os.environ['ADB_SLACK_USER']
 except KeyError as key:
     print(f"Environment variable missing: {key}")
     sys.exit(1)
@@ -40,6 +42,9 @@ def create_jenkins_job():
 	params = {"ARANGODB_BRANCH": ARANGODB_BRANCH}
 	if not ENTERPRISE_BRANCH is None:
 		params["ENTERPRISE_BRANCH"] = ENTERPRISE_BRANCH
+
+	if not SLACK_USER is None:
+		params["SLACK"] = SLACK_USER
 
 	create_response = requests.post(os.path.join(JENKINS_URL, "job/{}/buildWithParameters".format(JOB_NAME)),
 		auth=(USER, TOKEN), params=params, verify=False)
