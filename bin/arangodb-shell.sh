@@ -22,7 +22,7 @@ fi
 
 case "$1" in
     jenkins)
-        if [ $# -lt 2]; then
+        if [ $# -lt 2 ]; then
             echo "Missing argument to jenkins."
             echo ""
             usage
