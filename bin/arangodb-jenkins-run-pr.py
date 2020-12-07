@@ -46,6 +46,8 @@ def create_jenkins_job():
 	if not SLACK_USER is None:
 		params["SLACK"] = SLACK_USER
 
+	params["CHECK_API"] = False
+
 	create_response = requests.post(os.path.join(JENKINS_URL, "job/{}/buildWithParameters".format(JOB_NAME)),
 		auth=(USER, TOKEN), params=params, verify=False)
 
