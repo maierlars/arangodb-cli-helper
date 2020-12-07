@@ -6,7 +6,7 @@ function usage {
 Usage: $0 [-h|--help] <command> [<args>]
   -h|--help           show this usage information
 Commands:
-  jenkins             start a jenkins pr matrix on the current branch
+  jenkins start       start a jenkins pr matrix on the current branch
   jenkins status      query the status of the last jenkins pr matrix posted on the PR
   jenkins watch       watch the status of the last jenkins pr matrix posted on the PR
   prs                 list all PRs associated with the current branch
@@ -22,8 +22,14 @@ fi
 
 case "$1" in
     jenkins)
+        if [ $# -lt 2]; then
+            echo "Missing argument to jenkins."
+            echo ""
+            usage
+            exit 1
+        fi
         case "$2" in
-            ''|post) # default
+            start)
                 arangodb-jenkins-run-pr-post.py
                 ;;
             status)
