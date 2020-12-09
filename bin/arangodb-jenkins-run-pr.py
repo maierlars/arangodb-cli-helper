@@ -2,10 +2,11 @@
 # vim: set noet sw=8:
 
 import os
-import requests
 import pygit2
-import time
+import re
+import requests
 import sys
+import time
 
 def eprint(*args, **kwargs):
     print(*args, file=sys.stderr, **kwargs)
@@ -26,27 +27,45 @@ except KeyError as key:
 except:
     pass
 
+def read_base_version():
+	with open("VERSION", "r") as fh:
+		str = fh.read().strip()
+	parts = re.split('[.-]', str)
+	if parts[-1] == 'devel':
+		return 'devel'
+	else:
+		version = '.'.join(parts[0:2])
+		return version
+
 JENKINS_URL="https://jenkins.arangodb.biz"
 JOB_NAME="arangodb-matrix-pr"
 
-enterprise_path = os.path.join(os.getcwd(), "enterprise")
+community_path = os.getcwd()
+enterprise_path = os.path.join(community_path, "enterprise")
 
-ARANGODB_BRANCH = pygit2.Repository(os.getcwd()).head.shorthand
-ENTERPRISE_BRANCH = pygit2.Repository(enterprise_path).head.shorthand if os.path.isdir(enterprise_path) else None
+repo_community = pygit2.Repository(community_path)
+repo_enterprise = pygit2.Repository(enterprise_path)
+
+ARANGODB_BRANCH = repo_community.head.shorthand
+ENTERPRISE_BRANCH = repo_enterprise.head.shorthand if os.path.isdir(enterprise_path) else None
+
+BASE_VERSION = read_base_version()
 
 def create_jenkins_job():
 	confirm = input("Run jenkins on {b}, enterprise {eb}:\nContinue? [Y/n] ".format(b=ARANGODB_BRANCH, eb=ENTERPRISE_BRANCH))
 	if confirm.strip() not in ["Y", "y", ""]:
 		sys.exit(1)
 
-	params = {"ARANGODB_BRANCH": ARANGODB_BRANCH}
+	params = {
+		"BASE_VERSION": BASE_VERSION,
+		"ARANGODB_BRANCH": ARANGODB_BRANCH,
+		"CHECK_API": False,
+	}
 	if not ENTERPRISE_BRANCH is None:
 		params["ENTERPRISE_BRANCH"] = ENTERPRISE_BRANCH
 
 	if not SLACK_USER is None:
 		params["SLACK"] = SLACK_USER
-
-	params["CHECK_API"] = False
 
 	create_response = requests.post(os.path.join(JENKINS_URL, "job/{}/buildWithParameters".format(JOB_NAME)),
 		auth=(USER, TOKEN), params=params, verify=False)

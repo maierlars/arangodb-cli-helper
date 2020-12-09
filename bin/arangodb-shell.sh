@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 function usage {
     cat <<USAGE
 Usage: $0 [-h|--help] <command> [<args>]
@@ -13,12 +12,10 @@ Commands:
 USAGE
 }
 
-if [ $# -eq 0 ]
-then
+if [ $# -eq 0 ]; then
     usage
     exit 1
 fi
-
 
 case "$1" in
     jenkins)
