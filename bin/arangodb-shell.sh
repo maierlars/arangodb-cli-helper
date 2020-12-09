@@ -8,6 +8,7 @@ Commands:
   jenkins start       start a jenkins pr matrix on the current branch
   jenkins status      query the status of the last jenkins pr matrix posted on the PR
   jenkins watch       watch the status of the last jenkins pr matrix posted on the PR
+  jenkins clean       delete all but the last jenkins pr comments
   prs                 list all PRs associated with the current branch
 USAGE
 }
@@ -34,6 +35,9 @@ case "$1" in
                 ;;
             watch)
                 arangodb-jenkins-pr-status-watch.py
+                ;;
+            clean)
+                arangodb-github-run-clean-comments.py
                 ;;
             *)
                 echo "Unknown command or option to $1: $2"

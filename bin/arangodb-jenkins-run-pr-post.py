@@ -23,6 +23,9 @@ def last_jenkins_run():
     if len(comments) == 0:
         return None
 
+    if len(comments) > 15:
+        print("There are now more then 15 jenkins comments. Consider cleaning some of them.")
+
     last_run = list(filter(len, comments[-1]["body"].split("/")))[-1]
 
     print("Fetching status of last run: {}".format(last_run))

@@ -13,7 +13,7 @@ _adb_complete()
     elif [ "$COMP_CWORD" = "2" ]; then
         case "$prev" in
             jenkins)
-                COMPREPLY=( $(compgen -W 'start status watch' -- ${cur}) )
+                COMPREPLY=( $(compgen -W 'start status watch clean' -- ${cur}) )
                 ;;
             *)
                 ;;
