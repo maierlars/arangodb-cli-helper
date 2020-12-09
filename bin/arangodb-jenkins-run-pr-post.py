@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# vim: set et sw=4 sts=4:
 
 import os
 import requests
@@ -48,7 +49,7 @@ print(URL)
 q = input("Do you want to comment this URL on the PR? [Y/n]: ");
 
 if q in ["n", "N"]:
-	quit()
+    quit()
 
 github_comment_tool.create_pr_comment(URL)
 
