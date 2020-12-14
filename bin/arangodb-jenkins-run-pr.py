@@ -37,6 +37,38 @@ def read_base_version():
         version = '.'.join(parts[0:2])
         return version
 
+arangodb_repo_urls = {
+    "community": [
+        "git@github.com:arangodb/arangodb.git",
+        "https://github.com/arangodb/arangodb.git",
+    ],
+    "enterprise": [
+        "git@github.com:arangodb/enterprise.git",
+        "https://github.com/arangodb/enterprise.git",
+    ],
+}
+
+def get_matching_remote(repo, remote_urls):
+    remotes = [remote.name for remote in repo.remotes if remote.url
+        in remote_urls]
+    if 0 == len(remotes):
+        eprint("!!! Couldn't find any matching remote in the repository", repo.path)
+        eprint("Tried to detect by finding one of the following urls:")
+        for url in remote_urls:
+            eprint(" -", url)
+        eprint("Looked at the following remotes:")
+        for remote in repo.remotes:
+            eprint(" -", remote.name, "(", remote.url, ")")
+        sys.exit(1)
+
+    if 1 < len(remotes):
+        eprint("Warning: found multiple arangodb remotes.")
+        eprint("Using the first of the following candidates:")
+        for remote in remotes:
+            eprint(" -", remote)
+
+    return remotes[0]
+
 JENKINS_URL="https://jenkins.arangodb.biz"
 JOB_NAME="arangodb-matrix-pr"
 
@@ -107,8 +139,35 @@ def abort_jenkins_job(id):
         sys.exit(1)
     print("{} aborted".format(id))
 
+def check_branch_up_to_date(repo, remote):
+    branch = repo.head.shorthand
+    remote_branch = '/'.join(["refs", "remotes", remote, branch])
+    local_rev = repo.head.target
+    remote_rev = repo.revparse_single(remote_branch).oid
+    merge_base = repo.merge_base(local_rev, remote_rev)
+    # Check that we don't have local commits that aren't pushed.
+    # Remote commits we know of that aren't merged into our local branch
+    # are fine, though.
+    return merge_base == local_rev
+
+
+def check_branches_up_to_date():
+    community_remote = get_matching_remote(repo_community,
+            arangodb_repo_urls["community"])
+    enterprise_remote = get_matching_remote(repo_enterprise,
+            arangodb_repo_urls["enterprise"])
+    com_up_to_date = check_branch_up_to_date(repo_community, community_remote)
+    ent_op_to_date = check_branch_up_to_date(repo_enterprise, enterprise_remote)
+    if not com_up_to_date:
+        eprint("Community branch has unpublished commits")
+    if not ent_op_to_date:
+        eprint("Enterprise branch has unpublished commits")
+    if not com_up_to_date or not ent_op_to_date:
+        sys.exit(1)
 
 if __name__ == '__main__':
+    check_branches_up_to_date()
+
     url = create_jenkins_job()
     print(url)
     sys.exit(0)

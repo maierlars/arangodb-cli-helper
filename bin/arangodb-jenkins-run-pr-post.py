@@ -33,6 +33,8 @@ def last_jenkins_run():
 
     return last_job
 
+jenkins_runner.check_branches_up_to_date()
+
 last_run = last_jenkins_run()
 if last_run is not None:
     if last_run["result"] is None:
