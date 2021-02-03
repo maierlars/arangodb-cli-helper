@@ -43,7 +43,7 @@ def get_pr_comments():
 
     if len(arangodb_prs) == 0:
         eprint("PR not found")
-        sys.exit(1)
+        return []
 
     if len(arangodb_prs) > 1:
         eprint("found multiple PRs:")
