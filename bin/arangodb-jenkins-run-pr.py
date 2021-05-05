@@ -27,9 +27,16 @@ except KeyError as key:
 except:
     pass
 
+def slurp_version_file():
+    try:
+        with open("ARANGO-VERSION", "r") as fh:
+            return fh.read().strip()
+    except:
+        with open("VERSION", "r") as fh:
+            return fh.read().strip()
+
 def read_base_version():
-    with open("VERSION", "r") as fh:
-        str = fh.read().strip()
+    str = slurp_version_file()
     parts = re.split('[.-]', str)
     if parts[-1] == 'devel':
         return 'devel'
@@ -41,10 +48,12 @@ arangodb_repo_urls = {
     "community": [
         "git@github.com:arangodb/arangodb.git",
         "https://github.com/arangodb/arangodb.git",
+        "git@github.com:arangodb/arangodb",
     ],
     "enterprise": [
         "git@github.com:arangodb/enterprise.git",
         "https://github.com/arangodb/enterprise.git",
+        "git@github.com:arangodb/enterprise",
     ],
 }
 
