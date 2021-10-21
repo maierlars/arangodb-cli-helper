@@ -58,14 +58,11 @@ if last_run is not None:
 
 URL = jenkins_runner.create_jenkins_job(args)
 
-print(URL)
-q = input("Do you want to comment this URL on the PR? [Y/n]: ");
+if args.interactive == 'yes'
+    print(URL)
+    q = input("Do you want to comment this URL on the PR? [y/N]: ");
 
-if q in ["n", "N"]:
-    quit()
+    if q not in ["y", "Y"]:
+        quit()
 
-github_comment_tool.create_pr_comment(URL)
-
-
-
-
+    github_comment_tool.create_pr_comment(URL)
