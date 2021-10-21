@@ -25,16 +25,10 @@ parser.add_argument('--interactive', dest='interactive', choices=['yes', 'no'],
 args = parser.parse_args()
 
 
-
 def last_jenkins_run():
-    comments = github_comment_lister.list_all_jenkins_pr_comments()
-    if len(comments) == 0:
+    last_run = github_comment_lister.get_latest_jenkins_run()
+    if last_run is None:
         return None
-
-    if len(comments) > 15:
-        print("There are now more then 15 jenkins comments. Consider cleaning some of them.")
-
-    last_run = list(filter(len, comments[-1]["body"].split("/")))[-1]
 
     print("Fetching status of last run: {}".format(last_run))
     last_job = jenkins_job_manager.jenkins_job_status(last_run)

@@ -72,6 +72,45 @@ def list_all_jenkins_pr_comments():
 
     return jenkins_runs
 
+def get_latest_jenkins_run_url():
+    arangodb_prs_reponse = requests.get(os.path.join(GITHUB_BASE_URL, "repos", ARANGODB_REPO, "pulls"), auth=(USER, GITHUB_API_TOKEN),
+    params={"head": "{}:{}".format(REPO_USER, ARANGODB_BRANCH)})
+
+    if arangodb_prs_reponse.status_code != 200:
+        eprint("Failed to get PR:", arangodb_prs_reponse.reason)
+        sys.exit(1)
+
+    arangodb_prs = arangodb_prs_reponse.json()
+
+    if len(arangodb_prs) > 1:
+        eprint("found multiple PRs:")
+        for pr in arangodb_prs:
+            eprint("#{pr[number]} {pr[title]} [{pr[html_url]}]".format(pr=pr))
+        sys.exit(1)
+
+    status_url = os.path.join(GITHUB_BASE_URL, "repos", ARANGODB_REPO, "statuses", arangodb_prs[0]["head"]["sha"])
+
+    arangodb_status_reponse = requests.get(status_url, auth=(USER, GITHUB_API_TOKEN))
+
+    if arangodb_prs_reponse.status_code != 200:
+        eprint("Failed to get Head Status:", arangodb_prs_reponse.reason)
+        sys.exit(1)
+
+    arangodb_status = arangodb_status_reponse.json()
+
+    for status in arangodb_status:
+        if status["context"] == "arangodb-matrix-pr":
+            return status["target_url"]
+
+    return None
+
+def get_latest_jenkins_run():
+    url = get_latest_jenkins_run_url()
+    if url is not None:
+        return list(filter(len, url.split("/")))[-1]
+    return None
+
+
 def clean_old_jenkins_pr_comments(last = 1):
 
     jenkins_runs = list_all_jenkins_pr_comments()

@@ -16,15 +16,14 @@ def eprint(*args, **kwargs):
     print(*args, file=sys.stderr, **kwargs)
 
 def watch_jenkins_status():
-    comments = github_comment_tool.list_all_jenkins_pr_comments()
 
-    if len(comments) == 0:
+    last_run = github_comment_tool.get_latest_jenkins_run()
+
+    if last_run is None:
         eprint("No jenkins runs found")
         quit()
 
-    last_run = list(filter(len, comments[-1]["body"].split("/")))[-1]
-
-    print("Watching status of last run: {}".format(comments[-1]["body"]))
+    print("Watching status of last run: {}".format(last_run))
 
     known_status = dict()
 

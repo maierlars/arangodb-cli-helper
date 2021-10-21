@@ -14,13 +14,10 @@ github_comment_tool = importlib.import_module("arangodb-github-list-comments")
 def eprint(*args, **kwargs):
     print(*args, file=sys.stderr, **kwargs)
 
-comments = github_comment_tool.list_all_jenkins_pr_comments()
-
-if len(comments) == 0:
+last_run = github_comment_tool.get_latest_jenkins_run()
+if last_run is None:
     eprint("No jenkins runs found")
     quit()
-
-last_run = list(filter(len, comments[-1]["body"].split("/")))[-1]
 
 print("Fetching status of last run: {}".format(last_run))
 
