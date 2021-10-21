@@ -58,8 +58,9 @@ if last_run is not None:
 
 URL = jenkins_runner.create_jenkins_job(args)
 
-if args.interactive == 'yes'
-    print(URL)
+print(URL)
+
+if args.interactive == 'yes':
     q = input("Do you want to comment this URL on the PR? [y/N]: ");
 
     if q not in ["y", "Y"]:
