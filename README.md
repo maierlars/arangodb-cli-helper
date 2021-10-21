@@ -19,3 +19,8 @@ source path-to-here/bash-completion.bash
 ```
 
 in your `~/.bashrc`.
+
+There is an (optional) environment variable `ADB_JENKINS_START_OPTS` in order to
+pass default parameters to `adb jenkins start`. The string will be subject to
+bash's command substitution, arithmetic expansion, word splitting, and pathname
+expansion.

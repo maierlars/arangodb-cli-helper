@@ -92,10 +92,11 @@ ENTERPRISE_BRANCH = repo_enterprise.head.shorthand if os.path.isdir(enterprise_p
 
 BASE_VERSION = read_base_version()
 
-def create_jenkins_job():
-    confirm = input("Run jenkins on {b}, enterprise {eb}:\nContinue? [Y/n] ".format(b=ARANGODB_BRANCH, eb=ENTERPRISE_BRANCH))
-    if confirm.strip() not in ["Y", "y", ""]:
-        sys.exit(1)
+def create_jenkins_job(args):
+    if args.interactive == 'yes':
+        confirm = input("Run jenkins on {b}, enterprise {eb}:\nContinue? [Y/n] ".format(b=ARANGODB_BRANCH, eb=ENTERPRISE_BRANCH))
+        if confirm.strip() not in ["Y", "y", ""]:
+            sys.exit(1)
 
     params = {
         "BASE_VERSION": BASE_VERSION,

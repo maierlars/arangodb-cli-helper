@@ -7,6 +7,7 @@ import pygit2
 import time
 import sys
 import importlib
+import argparse
 
 jenkins_runner = importlib.import_module("arangodb-jenkins-run-pr")
 jenkins_job_manager = importlib.import_module("arangodb-jenkins-get-status")
@@ -15,6 +16,13 @@ github_comment_lister = importlib.import_module("arangodb-github-list-comments")
 
 def eprint(*args, **kwargs):
     print(*args, file=sys.stderr, **kwargs)
+
+
+parser = argparse.ArgumentParser(description='Process some integers.')
+parser.add_argument('--interactive', dest='interactive', choices=['yes', 'no'],
+        nargs='?', default='yes', const='yes')
+
+args = parser.parse_args()
 
 
 
@@ -48,7 +56,7 @@ if last_run is not None:
     else:
         print("Job has ended, Status: " + last_run["result"])
 
-URL = jenkins_runner.create_jenkins_job()
+URL = jenkins_runner.create_jenkins_job(args)
 
 print(URL)
 q = input("Do you want to comment this URL on the PR? [Y/n]: ");

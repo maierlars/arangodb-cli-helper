@@ -28,16 +28,18 @@ case "$1" in
         fi
         case "$2" in
             start)
-                arangodb-jenkins-run-pr-post.py
+                shift 2
+                set +u
+                exec arangodb-jenkins-run-pr-post.py $ADB_JENKINS_START_OPTS "$@"
                 ;;
             status)
-                arangodb-jenkins-pr-status.py
+                exec arangodb-jenkins-pr-status.py
                 ;;
             watch)
-                arangodb-jenkins-pr-status-watch.py
+                exec arangodb-jenkins-pr-status-watch.py
                 ;;
             clean)
-                arangodb-github-run-clean-comments.py
+                exec arangodb-github-run-clean-comments.py
                 ;;
             *)
                 echo "Unknown command or option to $1: $2"
@@ -48,7 +50,7 @@ case "$1" in
         esac
         ;;
     prs)
-        arangodb-github-post-comment-pr.py prs
+        exec arangodb-github-post-comment-pr.py prs
         ;;
     -h|--help)
         usage
