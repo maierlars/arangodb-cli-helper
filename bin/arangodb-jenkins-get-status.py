@@ -25,7 +25,7 @@ except KeyError as key:
 except:
     pass
 
-JENKINS_URL="https://jenkins.arangodb.biz"
+JENKINS_URL="https://jenkins.arangodb.biz:3456"
 JOB_NAME="arangodb-matrix-pr"
 
 enterprise_path = os.path.join(os.getcwd(), "enterprise")

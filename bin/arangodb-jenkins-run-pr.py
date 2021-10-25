@@ -78,7 +78,7 @@ def get_matching_remote(repo, remote_urls):
 
     return remotes[0]
 
-JENKINS_URL="https://jenkins.arangodb.biz"
+JENKINS_URL="https://jenkins.arangodb.biz:3456"
 JOB_NAME="arangodb-matrix-pr"
 
 community_path = os.getcwd()
