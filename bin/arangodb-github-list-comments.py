@@ -82,6 +82,9 @@ def get_latest_jenkins_run_url():
 
     arangodb_prs = arangodb_prs_reponse.json()
 
+    if len(arangodb_prs) == 0:
+        return None
+
     if len(arangodb_prs) > 1:
         eprint("found multiple PRs:")
         for pr in arangodb_prs:
