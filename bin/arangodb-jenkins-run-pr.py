@@ -91,6 +91,7 @@ ARANGODB_BRANCH = repo_community.head.shorthand
 ENTERPRISE_BRANCH = repo_enterprise.head.shorthand if os.path.isdir(enterprise_path) else None
 
 BASE_VERSION = read_base_version()
+BASE_BRANCH = BASE_VERSION
 
 def create_jenkins_job(args):
     if args.interactive == 'yes':
@@ -100,6 +101,7 @@ def create_jenkins_job(args):
 
     params = {
         "BASE_VERSION": BASE_VERSION,
+        "BASE_BRANCH": BASE_BRANCH,
         "ARANGODB_BRANCH": ARANGODB_BRANCH,
         "CHECK_API": False,
     }
