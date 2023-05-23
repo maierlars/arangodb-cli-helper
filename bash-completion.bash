@@ -9,11 +9,14 @@ _adb_complete()
 
     # Currently, adb only takes exactly one argument
     if [ "$COMP_CWORD" = "1" ]; then
-        COMPREPLY=( $(compgen -W '-h --help jenkins' -- ${cur}) )
+        COMPREPLY=( $(compgen -W '-h --help jenkins prs circleci' -- ${cur}) )
     elif [ "$COMP_CWORD" = "2" ]; then
         case "$prev" in
             jenkins)
                 COMPREPLY=( $(compgen -W 'start status watch clean' -- ${cur}) )
+                ;;
+            circleci)
+                COMPREPLY=( $(compgen -W 'start' -- ${cur}) )
                 ;;
             *)
                 ;;
