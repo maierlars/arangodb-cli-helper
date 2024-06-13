@@ -5,15 +5,16 @@ import os
 import http.client
 import importlib
 import json
+import argparse
+import itertools
 
 jenkins_runner = importlib.import_module("arangodb-jenkins-run-pr")
-jenkins_job_manager = importlib.import_module("arangodb-jenkins-get-status")
-github_comment_tool = importlib.import_module("arangodb-github-post-comment-pr")
-github_comment_lister = importlib.import_module("arangodb-github-list-comments")
 
-def create_circleci_job():
+def create_circleci_job(params):
     conn = http.client.HTTPSConnection("circleci.com")
-    payload = {"branch": jenkins_runner.ARANGODB_BRANCH}
+
+    defaultParams = {"branch": jenkins_runner.ARANGODB_BRANCH}
+    payload = defaultParams | params
 
     headers = {
         'content-type': "application/json",
@@ -29,4 +30,21 @@ def create_circleci_job():
 
 jenkins_runner.check_branches_up_to_date()
 
-create_circleci_job()
+
+parser = argparse.ArgumentParser(formatter_class=argparse.RawTextHelpFormatter)
+parser.add_argument('--param', '-p', nargs=2, action='append', default=[], help=
+"""\
+Additional parameters for the job. E.g.:
+    --param sanitizer alubsan
+    --param nightly true
+    --param replication-two true
+Can also be used to override 'branch'.
+""")
+# --interactive is unused here, but needed for compatibility with adb jenkins
+parser.add_argument('--interactive', dest='interactive', choices=['yes', 'no'],
+                    nargs='?', default='yes', const='yes')
+
+args = parser.parse_args()
+params = dict(map((lambda x: (x[0], x[1])), args.param))
+
+create_circleci_job(params)
