@@ -13,8 +13,10 @@ jenkins_runner = importlib.import_module("arangodb-jenkins-run-pr")
 def create_circleci_job(params):
     conn = http.client.HTTPSConnection("circleci.com")
 
-    defaultParams = {"branch": jenkins_runner.ARANGODB_BRANCH}
-    payload = defaultParams | params
+    payload = {
+        "branch": jenkins_runner.ARANGODB_BRANCH,
+        "parameters": params,
+    }
 
     headers = {
         'content-type': "application/json",
@@ -38,7 +40,6 @@ Additional parameters for the job. E.g.:
     --param sanitizer alubsan
     --param nightly true
     --param replication-two true
-Can also be used to override 'branch'.
 """)
 # --interactive is unused here, but needed for compatibility with adb jenkins
 parser.add_argument('--interactive', dest='interactive', choices=['yes', 'no'],
