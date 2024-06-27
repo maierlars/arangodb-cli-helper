@@ -6,12 +6,6 @@ _adb_complete()
     COMPREPLY=()
     prev=("${COMP_WORDS[@]:1:COMP_CWORD-1}")
     cur="${COMP_WORDS[COMP_CWORD]}"
-#    echo "" >&2
-#    echo "COMP_WORDS=${COMP_WORDS[@]}" >&2
-#    echo "COMP_CWORD=$COMP_CWORD" >&2
-#    echo "prev=${prev[@]}" >&2
-#    echo "cur=$cur" >&2
-#    echo "" >&2
 
     if [ "$COMP_CWORD" -lt 1 ]; then
         return
