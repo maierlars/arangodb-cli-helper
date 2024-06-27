@@ -7,23 +7,57 @@ _adb_complete()
     prev=("${COMP_WORDS[@]:1:COMP_CWORD-1}")
     cur="${COMP_WORDS[COMP_CWORD]}"
 
-    # Currently, adb only takes exactly one argument
-    if [ "$COMP_CWORD" = "1" ]; then
-        COMPREPLY=( $(compgen -W '-h --help jenkins prs circleci' -- ${cur}) )
-    elif [ "$COMP_CWORD" = "2" ]; then
-        case "$prev" in
-            jenkins)
-                COMPREPLY=( $(compgen -W 'start status watch clean' -- ${cur}) )
-                ;;
-            circleci)
-                COMPREPLY=( $(compgen -W 'start' -- ${cur}) )
-                ;;
-            *)
-                ;;
-        esac
-    else
-        :
+    if [ "$COMP_CWORD" -lt 1 ]; then
+        return
     fi
+
+    if [ "$COMP_CWORD" -eq 1 ]; then
+        COMPREPLY=( $(compgen -W '-h --help jenkins prs circleci' -- ${cur}) )
+        return;
+    fi
+
+    case "${prev[0]}" in
+        jenkins)
+            if [ "$COMP_CWORD" -eq 2 ]; then
+                COMPREPLY=( $(compgen -W 'start status watch clean' -- ${cur}) )
+                return
+            fi
+            ;;
+        circleci)
+            if [ "$COMP_CWORD" -eq 2 ]; then
+                COMPREPLY=( $(compgen -W 'start' -- ${cur}) )
+                return
+            fi
+            case "${prev[-1]}" in
+                --param)
+                    COMPREPLY=( $(compgen -W 'sanitizer replication-two nightly ui dont-cancel-pipelines' -- ${cur}) )
+                    return
+                    ;;
+            esac
+            case "${prev[-2]}" in
+                --param)
+                    case "${prev[-1]}" in
+                        sanitizer)
+                            COMPREPLY=( $(compgen -W 'alubsan tsan' -- ${cur}) )
+                            return
+                            ;;
+                        replication-two | nightly | dont-cancel-pipelines)
+                            COMPREPLY=( $(compgen -W 'true false' -- ${cur}) )
+                            return
+                            ;;
+                        ui)
+                            COMPREPLY=( $(compgen -W 'off only community' -- ${cur}) )
+                            return
+                            ;;
+                    esac
+                    ;;
+            esac
+            COMPREPLY=( $(compgen -W '-p --param' -- ${cur}) )
+            return
+            ;;
+        *)
+            ;;
+    esac
 
     return 0
 }
