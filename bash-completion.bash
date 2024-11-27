@@ -29,13 +29,13 @@ _adb_complete()
                 return
             fi
             case "${prev[-1]}" in
-                --param)
+                -p|--param)
                     COMPREPLY=( $(compgen -W 'sanitizer replication-two nightly ui dont-cancel-pipelines' -- ${cur}) )
                     return
                     ;;
             esac
             case "${prev[-2]}" in
-                --param)
+                -p|--param)
                     case "${prev[-1]}" in
                         sanitizer)
                             COMPREPLY=( $(compgen -W 'alubsan tsan' -- ${cur}) )
