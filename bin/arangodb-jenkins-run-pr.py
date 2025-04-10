@@ -155,7 +155,7 @@ def check_branch_up_to_date(repo, remote):
     branch = repo.head.shorthand
     remote_branch = '/'.join(["refs", "remotes", remote, branch])
     local_rev = repo.head.target
-    remote_rev = repo.revparse_single(remote_branch).oid
+    remote_rev = repo.revparse_single(remote_branch).id
     merge_base = repo.merge_base(local_rev, remote_rev)
     # Check that we don't have local commits that aren't pushed.
     # Remote commits we know of that aren't merged into our local branch
