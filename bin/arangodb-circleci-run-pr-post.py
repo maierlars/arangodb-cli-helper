@@ -42,7 +42,9 @@ def castParam(argp, param, arg):
             'sanitizer': toString,
             'replication-two': toBool,
             'nightly': toBool,
-            'ui': toString,
+            # TODO maybe make this an array parameter for a nicer api and auto
+            # completion?
+            'config-definitions': toString,
             'dont-cancel-pipelines': toBool,
     }
     if param not in switch:
@@ -62,7 +64,7 @@ Additional parameters for the job. E.g.:
     --param sanitizer alubsan
     --param nightly true
     --param replication-two true
-    --param ui off
+    --param config-definitions 'test-definitions.yml ui.yml'
     --param dont-cancel-pipelines true
 """)
 # --interactive is unused here, but needed for compatibility with adb jenkins

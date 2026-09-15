@@ -30,7 +30,7 @@ _adb_complete()
             fi
             case "${prev[-1]}" in
                 -p|--param)
-                    COMPREPLY=( $(compgen -W 'sanitizer replication-two nightly ui dont-cancel-pipelines' -- ${cur}) )
+                    COMPREPLY=( $(compgen -W 'sanitizer replication-two nightly config-definitions dont-cancel-pipelines' -- ${cur}) )
                     return
                     ;;
             esac
@@ -45,8 +45,8 @@ _adb_complete()
                             COMPREPLY=( $(compgen -W 'true false' -- ${cur}) )
                             return
                             ;;
-                        ui)
-                            COMPREPLY=( $(compgen -W 'off only community' -- ${cur}) )
+                        config-definitions)
+                            COMPREPLY=( $(compgen -W 'arangojs.yml java.yml spark-datasource.yml ui.yml go.yml kafka.yml spring-data.yml tinkerpop-provider.yml test-definitions.yml' -- ${cur}) )
                             return
                             ;;
                     esac
