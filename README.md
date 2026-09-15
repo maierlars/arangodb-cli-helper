@@ -25,3 +25,9 @@ There is an (optional) environment variable `ADB_JENKINS_START_OPTS` in order to
 pass default parameters to `adb jenkins start`. The string will be subject to
 bash's command substitution, arithmetic expansion, word splitting, and pathname
 expansion.
+
+`adb circleci start` triggers the CircleCI pipeline named `testing` (override
+with `ADB_CIRCLECI_PIPELINE`) of arangodb/arangodb on the current branch. The
+pipeline definition id is looked up by name, which requires a new-format
+CircleCI API token; alternatively, set `ADB_CIRCLECI_PIPELINE_DEFINITION_ID` to
+the id shown in Project Settings > Pipelines.

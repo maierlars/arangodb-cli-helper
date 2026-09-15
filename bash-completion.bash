@@ -30,23 +30,19 @@ _adb_complete()
             fi
             case "${prev[-1]}" in
                 -p|--param)
-                    COMPREPLY=( $(compgen -W 'sanitizer replication-two nightly config-definitions dont-cancel-pipelines' -- ${cur}) )
+                    COMPREPLY=( $(compgen -W 'dont-cancel-pipelines enterprise-branch without-instrumentation with-tsan with-alubsan full config-definitions replication-two' -- ${cur}) )
                     return
                     ;;
             esac
             case "${prev[-2]}" in
                 -p|--param)
                     case "${prev[-1]}" in
-                        sanitizer)
-                            COMPREPLY=( $(compgen -W 'alubsan tsan' -- ${cur}) )
-                            return
-                            ;;
-                        replication-two | nightly | dont-cancel-pipelines)
+                        dont-cancel-pipelines | without-instrumentation | with-tsan | with-alubsan | full | replication-two)
                             COMPREPLY=( $(compgen -W 'true false' -- ${cur}) )
                             return
                             ;;
                         config-definitions)
-                            COMPREPLY=( $(compgen -W 'arangojs.yml java.yml spark-datasource.yml ui.yml go.yml kafka.yml spring-data.yml tinkerpop-provider.yml test-definitions.yml' -- ${cur}) )
+                            COMPREPLY=( $(compgen -W 'arangojs.yml java.yml spark-ds.yml ui.yml go.yml kafka.yml spring-data.yml tinkerpop.yml py-async.yml py.yml tests.yml' -- ${cur}) )
                             return
                             ;;
                     esac
