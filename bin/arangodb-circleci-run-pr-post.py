@@ -111,6 +111,7 @@ def castParam(argp, param, arg):
             # completion?
             'config-definitions': toString,
             'replication-two': toBool,
+            'create-test-docker-images': toEnum(['none', 'alpine', 'deb']),
             'create-preview-docker-images': toEnum(['none', 'alpine', 'deb']),
     }
     if param not in switch:
@@ -135,6 +136,7 @@ Additional parameters for the job. E.g.:
     --param full true
     --param config-definitions 'tests.yml ui.yml'
     --param replication-two true
+    --param create-test-docker-images alpine
     --param create-preview-docker-images alpine
 By default, enterprise-branch is set to the branch checked out in ./enterprise.
 """)
