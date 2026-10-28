@@ -87,6 +87,12 @@ def castParam(argp, param, arg):
         return str(arg)
     def toInt(arg):
         return int(arg)
+    def toEnum(allowed):
+        def conv(arg):
+            if arg not in allowed:
+                raise argparse.ArgumentError(argp, f"Invalid value for {param}: {arg} (allowed: {', '.join(allowed)})")
+            return arg
+        return conv
     def toBool(arg):
         if arg.lower() in ["true", "yes", "on", "1"]:
             return True
@@ -105,6 +111,7 @@ def castParam(argp, param, arg):
             # completion?
             'config-definitions': toString,
             'replication-two': toBool,
+            'create-preview-docker-images': toEnum(['none', 'alpine', 'deb']),
     }
     if param not in switch:
         raise argparse.ArgumentError(argp, f"Unknown job param {param}")
@@ -128,6 +135,7 @@ Additional parameters for the job. E.g.:
     --param full true
     --param config-definitions 'tests.yml ui.yml'
     --param replication-two true
+    --param create-preview-docker-images alpine
 By default, enterprise-branch is set to the branch checked out in ./enterprise.
 """)
 # --interactive is unused here, but needed for compatibility with adb jenkins

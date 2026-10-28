@@ -30,7 +30,7 @@ _adb_complete()
             fi
             case "${prev[-1]}" in
                 -p|--param)
-                    COMPREPLY=( $(compgen -W 'dont-cancel-pipelines enterprise-branch without-instrumentation with-tsan with-alubsan full config-definitions replication-two' -- ${cur}) )
+                    COMPREPLY=( $(compgen -W 'dont-cancel-pipelines enterprise-branch without-instrumentation with-tsan with-alubsan full config-definitions replication-two create-preview-docker-images' -- ${cur}) )
                     return
                     ;;
             esac
@@ -39,6 +39,10 @@ _adb_complete()
                     case "${prev[-1]}" in
                         dont-cancel-pipelines | without-instrumentation | with-tsan | with-alubsan | full | replication-two)
                             COMPREPLY=( $(compgen -W 'true false' -- ${cur}) )
+                            return
+                            ;;
+                        create-preview-docker-images)
+                            COMPREPLY=( $(compgen -W 'none alpine deb' -- ${cur}) )
                             return
                             ;;
                         config-definitions)
